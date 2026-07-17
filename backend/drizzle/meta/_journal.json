@@ -15,6 +15,20 @@
       "when": 1782920348881,
       "tag": "0001_stormy_vertigo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783917162264,
+      "tag": "0002_glorious_jack_murdock",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783918053431,
+      "tag": "0003_flawless_tarot",
+      "breakpoints": true
     }
   ]
 }

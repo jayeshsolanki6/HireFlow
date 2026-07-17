@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { loginUser, logoutUser, refreshToken, registerUser } from './auth.service.js'
+import { auth } from './auth.service.js'
 import { ApiResponse } from '../../utils/ApiResponse.js';
-// import { AuthenticatedRequest } from '../../types/types.js';
 
 
 export const register = async (req : Request, res : Response, next : NextFunction) => {
     try {
-        const result = await registerUser(req.body);
+        const result = await auth.register(req.body);
 
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly : true,
@@ -39,7 +38,7 @@ export const register = async (req : Request, res : Response, next : NextFunctio
 
 export const login = async (req : Request, res : Response, next : NextFunction) => {
     try {
-        const result = await loginUser(req.body);
+        const result = await auth.login(req.body);
 
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly : true,
@@ -73,7 +72,7 @@ export const refresh = async (req : Request, res : Response, next : NextFunction
     try {
         const token = req.cookies.refreshToken;
 
-        const result = await refreshToken(token);
+        const result = await auth.refresh(token);
 
         res.cookie("refreshToken", result.refreshToken, {
             httpOnly : true,
@@ -86,6 +85,12 @@ export const refresh = async (req : Request, res : Response, next : NextFunction
             new ApiResponse(
                 "Token refreshed successfully",
                 {
+                    user: {
+                        id: result.user.id,
+                        name: result.user.name,
+                        email: result.user.email,
+                        role: result.user.role,
+                    },
                     accessToken : result.accessToken
                 }
             )
@@ -100,7 +105,7 @@ export const logout = async (req : Request, res : Response, next : NextFunction)
     try {
         const userId = req.user.userId;
 
-        await logoutUser(userId);
+        await auth.logout(userId);
 
         res.clearCookie("refreshToken", {
             httpOnly : true,

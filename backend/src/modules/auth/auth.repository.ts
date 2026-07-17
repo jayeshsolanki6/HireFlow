@@ -1,8 +1,7 @@
 import { eq } from 'drizzle-orm';
 
 import { db } from '../../db/index.js'
-import { users } from '../../db/schema/users.js'
-import { refreshTokens } from '../../db/schema/refreshTokens.js';
+import { users, refreshTokens } from '../../db/schema/index.js'
 
 export const findUserByEmail = async (email : string) => {
     const result = await db

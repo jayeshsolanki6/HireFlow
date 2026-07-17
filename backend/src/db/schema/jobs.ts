@@ -11,11 +11,7 @@ export const jobStatusEnum = pgEnum("job_status", [
 
 export const jobs = pgTable("jobs", {
     id : uuid().primaryKey().defaultRandom(),
-    recruiterId : uuid().notNull().references(
-        () => users.id,
-        {onDelete:"cascade"}
-    ),
-    companyId :  uuid().notNull().references(
+    companyId : uuid().notNull().references(
         () => companies.id,
         {onDelete:"cascade"}
     ),
