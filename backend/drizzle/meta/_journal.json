@@ -29,6 +29,13 @@
       "when": 1783918053431,
       "tag": "0003_flawless_tarot",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1784292308573,
+      "tag": "0004_light_sue_storm",
+      "breakpoints": true
     }
   ]
 }

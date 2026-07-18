@@ -1,5 +1,5 @@
 import { ApiError } from "../../utils/ApiError.js";
-import { createJob, findCompanyIdByRecruiterId, getAllJobsByCompanyId, getJobById, updateJob, closeJob } from "./job.repository.js";
+import { createJob, findCompanyIdByRecruiterId, getAllJobsByCompanyId, getJobById, updateJob, deleteJob } from "./job.repository.js";
 import { CreateJobInput } from "./job.types.js";
 
 export const job = {
@@ -49,14 +49,13 @@ export const job = {
         return result;
     },
 
-    closeJob : async (jobId : string, recruiterId : string) => {
+    deleteJob : async (jobId : string, recruiterId : string) => {
         const companyId = await findCompanyIdByRecruiterId(recruiterId);
 
         if(!companyId) {
             throw new ApiError(404, "Company not found.");
         }
 
-        const result = await closeJob(companyId, jobId);
-        return result;
+        await deleteJob(companyId, jobId);
     }
 }

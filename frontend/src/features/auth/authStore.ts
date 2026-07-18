@@ -18,6 +18,7 @@ interface AuthState {
     isSigningUp : boolean;
     isLoading : boolean;
 
+    setAuth : (user : User | null, accessToken : string | null) => void;
     login : (email : string, password : string) => Promise<"candidate" | "recruiter" | "admin" | null>;
     register : (name : string, email : string, password : string, role : "candidate" | "recruiter") => Promise<"candidate" | "recruiter" | null>;
     refresh : () => Promise<void>;
@@ -32,6 +33,13 @@ export const useAuthStore = create<AuthState>((set)=>({
     isSigningUp : false,
     isLoading : true,
 
+    setAuth : (user, accessToken) => {
+        set({
+            user,
+            accessToken
+        });
+    },
+    
     login : async (email : string, password : string) => {
         console.log('Logging in with email:', email, 'and password:', password);
         set({ isLoggingIn : true });

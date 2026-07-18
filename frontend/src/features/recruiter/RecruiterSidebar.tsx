@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Briefcase, LogOut, Menu, PanelLeftClose, LayoutDashboard, Building2 } from 'lucide-react';
+import { Briefcase, LogOut, Menu, PanelLeftClose, LayoutDashboard, Building2, FileText } from 'lucide-react';
 import { useAuthStore } from '../auth/authStore';
 import { useRecruiterStore } from './recruiterStore';
 
@@ -11,7 +11,7 @@ const PlusIcon = () => (
 
 const links = [
     { label: 'Dashboard', path: '/recruiter/dashboard', icon: <LayoutDashboard size={15} /> },
-    { label: 'My Job Postings', path: '/recruiter/jobs', icon: <Briefcase size={15} /> },
+    { label: 'My Job Postings', path: '/recruiter/jobs', icon: <FileText size={15} /> },
     { label: 'Post a Job', path: '/recruiter/jobs/new', icon: <PlusIcon /> },
     { label: 'Company Profile', path: '/recruiter/company', icon: <Building2 size={15} /> }
 ];

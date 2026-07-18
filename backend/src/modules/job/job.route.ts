@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createJob, getAllJobs, getJob, updateJob, closeJob } from './job.controller.js';
+import { createJob, getAllJobs, getJob, updateJob, deleteJob } from './job.controller.js';
 import { validate } from '../../middleware/validate.js';
 import { accessSchema } from "../auth/auth.schema.js";
 import { authenticate } from "../../middleware/authenticate.js";
@@ -45,13 +45,13 @@ router.put(
     updateJob
 );
 
-// Close a job by id
-router.patch(
+// Delete a job by id
+router.delete(
     '/:id',
     validate(accessSchema, 'headers'),
     authenticate,
     authorize(["recruiter"]),
-    closeJob
+    deleteJob
 );
 
 

@@ -8,6 +8,6 @@ export interface CreateJobInput {
     salaryMax?: number;
     location: string;
     jobType: "full_time" | "part_time" | "internship";
-    jobStatus: "open" | "closed" | "draft";
+    jobStatus: "open" | "draft";
     deadline?: Date;
 }

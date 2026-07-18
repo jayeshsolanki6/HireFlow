@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import { ApiError } from './ApiError.js';
 
 export const generateAccessToken = (userId : string, role : string) => {
     const token = jwt.sign(
@@ -19,9 +20,17 @@ export const generateRefreshToken = (userId : string) => {
 }
 
 export const verifyAccessToken = (token : string) => {
-    return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
+    try {
+        return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
+    } catch (error) {
+        throw new ApiError(401, "Access token expired.");
+    }
 }
 
 export const verifyRefreshToken = (token : string) => {
-    return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string);
+    try {
+        return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET as string);
+    } catch (error) {
+        throw new ApiError(401, "Refresh token expired.");
+    }
 }

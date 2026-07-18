@@ -9,7 +9,7 @@ export const jobSchema = z
     salaryMax: z.coerce.number().optional(),
     location: z.string().trim().min(1, "Location is required").max(255, "Location must be less than 255 characters"),
     jobType: z.enum(["full_time", "part_time", "internship"], "Job type is required"),
-    jobStatus: z.enum(["open", "closed", "draft"], "Job status is required"),
+    jobStatus: z.enum(["open", "draft"], "Job status is required"),
     deadline: z.coerce.date().optional(),
   })
   .refine(

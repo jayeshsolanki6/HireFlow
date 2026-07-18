@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "../../db/index.js";
 import { companies } from "../../db/schema/companies.js";
 
@@ -31,7 +31,7 @@ export const createOrUpdateCompany = async (
             target : companies.recruiterId,
             set : {
                 name,
-                logoUrl,
+                logoUrl: logoUrl ?? sql`${companies.logoUrl}`,
                 about,
                 website
             }

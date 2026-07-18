@@ -77,20 +77,13 @@ export const updateJob = async (jobData : CreateJobInput & { companyId: string, 
     return result[0];
 }
 
-export const closeJob = async (companyId : string, jobId : string) => {
-    const result = await db
-        .update(jobs)
-        .set({
-            jobStatus: "closed",
-            updatedAt: new Date()
-        })
+export const deleteJob = async (companyId : string, jobId : string) => {
+    await db
+        .delete(jobs)
         .where(
             and(
                 eq(jobs.id, jobId),
                 eq(jobs.companyId, companyId)
             )
-        )
-        .returning();
-
-    return result[0];
+        );
 }

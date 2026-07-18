@@ -94,17 +94,17 @@ export const updateJob = async (req : Request, res : Response, next : NextFuncti
     }
 }
 
-export const closeJob = async (req : Request, res : Response, next : NextFunction) => {
+export const deleteJob = async (req : Request, res : Response, next : NextFunction) => {
     try {
         const jobId = req.params.id as string;
         const recruiterId = req.user.userId;
 
-        const result = await job.closeJob(jobId, recruiterId);
+        await job.deleteJob(jobId, recruiterId);
 
         res.status(200).json(
             new ApiResponse(
-                "Job closed successfully.",
-                result
+                "Job deleted successfully.",
+                null
             )
         );
     } catch (error) {

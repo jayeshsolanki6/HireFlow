@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
@@ -8,32 +7,32 @@ import { useRecruiterStore } from './recruiterStore';
 import { Loading } from '@/components/ui/Loading';
 
 export const CompanyPage = () => {
-  const navigate = useNavigate();
 
   const isLoading = useRecruiterStore((state) => state.isLoading);
   const company = useRecruiterStore((state) => state.company);
   const createOrUpdateCompany = useRecruiterStore((state) => state.createOrUpdateCompany);
   const getCompany = useRecruiterStore((state) => state.getCompany);
-  
+
   const [name, setName] = useState(company?.name || '');
   const [logo, setLogo] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState(company?.logoUrl || null);
   const [about, setAbout] = useState(company?.about || '');
   const [website, setWebsite] = useState(company?.website || '');
-  
+
   const [errors, setErrors] = useState({
     name: '',
     logo: ''
   });
 
   const [isEditing, setIsEditing] = useState(!company);
-    
+  const [isSaving, setIsSaving] = useState(false);
+
   useEffect(() => {
     getCompany();
   }, [getCompany]);
 
   useEffect(() => {
-    if(!company) return;
+    if (!company) return;
     setIsEditing(false);
     setName(company.name || '');
     setLogoPreview(company.logoUrl || null);
@@ -44,30 +43,30 @@ export const CompanyPage = () => {
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-        if(!file?.type.startsWith('image/')){
-            setErrors((prev) => ({ ...prev, logo: "Please select a valid image file" }));
-            return;
-        }
-        if(file.size > 2*1024*1024){
-            setErrors((prev) => ({ ...prev, logo: "File size should be less than 2MB" }));
-            return;
-        }
+      if (!file?.type.startsWith('image/')) {
+        setErrors((prev) => ({ ...prev, logo: "Please select a valid image file" }));
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        setErrors((prev) => ({ ...prev, logo: "File size should be less than 2MB" }));
+        return;
+      }
 
-        setErrors((prev) => ({ ...prev, logo: "" }));
-        setLogo(file);
+      setErrors((prev) => ({ ...prev, logo: "" }));
+      setLogo(file);
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
         setLogoPreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(errors.name || errors.logo) {
-        return;
+    if (errors.name || errors.logo) {
+      return;
     }
     setErrors({
       name: '',
@@ -75,8 +74,8 @@ export const CompanyPage = () => {
     });
 
     if (!name) {
-        setErrors((prev) => ({ ...prev, name: "Company Name is required" }));
-        return;
+      setErrors((prev) => ({ ...prev, name: "Company Name is required" }));
+      return;
     }
 
     const formData = new FormData();
@@ -84,15 +83,15 @@ export const CompanyPage = () => {
     formData.append('about', about);
     formData.append('website', website);
     if (logo) {
-        formData.append('logo', logo);
+      formData.append('logo', logo);
     }
 
-    const success = await createOrUpdateCompany(formData);
-    if(!success) return;
-    navigate('/recruiter/dashboard');
+    setIsSaving(true);
+    await createOrUpdateCompany(formData);
+    setIsSaving(false);
   };
 
-  if(isLoading) {
+  if (isLoading) {
     return <Loading />
   }
 
@@ -113,30 +112,44 @@ export const CompanyPage = () => {
       <div className="w-full">
         {!isEditing && company ? (
           <Card className="overflow-hidden">
-            <div className="h-32 bg-[var(--color-surface-1)]/50 border-b border-[var(--color-hairline)] w-full"></div>
-            <div className="px-6 md:px-10 pb-10">
-              <div className="flex justify-between items-end -mt-12 mb-6">
-                <div className="h-24 w-24 rounded-2xl flex items-center justify-center text-4xl font-bold bg-white text-black border-4 border-white shadow-sm overflow-hidden z-10">
+            <div className="p-6 md:p-8 flex flex-col gap-6">
+              <div className="flex flex-col sm:flex-row gap-5 sm:items-center">
+                <div className="h-20 w-20 shrink-0 rounded-2xl flex items-center justify-center text-3xl font-bold bg-white text-black border border-[var(--color-hairline)] shadow-sm overflow-hidden">
                   {company.logoUrl ? (
                     <img src={company.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                   ) : (
                     company?.name?.[0] || '?'
                   )}
                 </div>
-              </div>
-              <div className="flex flex-col lg:flex-row gap-10 items-start">
-                 <div className="flex-1 flex flex-col gap-4">
-                    <h2 className="text-3xl font-bold text-[var(--color-ink)] tracking-tight">{company.name}</h2>
-                    <a href={company.website} target="_blank" rel="noreferrer" className="text-sm text-[var(--color-primary-hover)] hover:underline font-mono inline-flex items-center gap-1 w-max">
-                      {company.website || 'No website provided'} ↗
+
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  <h2 className="text-2xl font-bold text-[var(--color-ink)] tracking-tight truncate">
+                    {company.name}
+                  </h2>
+                  {company.website ? (
+                    <a
+                      href={company.website}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm text-[var(--color-primary-hover)] hover:underline font-mono inline-flex items-center gap-1 w-max"
+                    >
+                      {company.website} ↗
                     </a>
-                    <div className="mt-6 flex flex-col gap-3">
-                      <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-subtle)]">About the Company</h3>
-                      <p className="text-sm text-[var(--color-ink-muted)] leading-relaxed whitespace-pre-wrap max-w-prose">
-                        {company.about || 'No description provided.'}
-                      </p>
-                    </div>
-                 </div>
+                  ) : (
+                    <span className="text-sm text-[var(--color-ink-subtle)] font-mono">
+                      No website provided
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="border-t border-[var(--color-hairline)] pt-5 flex flex-col gap-2">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-subtle)]">
+                  About the Company
+                </h3>
+                <p className="text-sm text-[var(--color-ink-muted)] leading-relaxed whitespace-pre-wrap max-w-prose">
+                  {company.about || 'No description provided.'}
+                </p>
               </div>
             </div>
           </Card>
@@ -172,23 +185,23 @@ export const CompanyPage = () => {
                 placeholder="e.g. Notion"
                 value={name}
                 onChange={(e) => {
-                    setName(e.target.value);
-                    setErrors((prev) => ({...prev, name : "" }));
+                  setName(e.target.value);
+                  setErrors((prev) => ({ ...prev, name: "" }));
                 }}
                 error={errors.name}
               />
 
               <div className="grid grid-cols-1 gap-4">
                 <Input
-                  label="Corporate Website URL"
-                  placeholder="e.g. https://notion.so"
+                  label="Website URL"
+                  placeholder="e.g. https://example.com"
                   value={website}
                   onChange={(e) => setWebsite(e.target.value)}
                 />
               </div>
 
               <Textarea
-                label="About / Corporate Description"
+                label="About / Description"
                 placeholder="Write a summary about company culture, values, history, and active domains..."
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
@@ -198,11 +211,11 @@ export const CompanyPage = () => {
 
             <div className="flex justify-end gap-3">
               {company && (
-                <Button type="button" variant="tertiary" onClick={() => setIsEditing(false)}>
+                <Button type="button" variant="tertiary" disabled={isSaving} onClick={() => setIsEditing(false)}>
                   Cancel
                 </Button>
               )}
-              <Button type="submit" variant="primary" disabled={(errors.name || errors.logo)? true : false}>
+              <Button type="submit" variant="primary" isLoading={isSaving} disabled={(errors.name || errors.logo) ? true : false}>
                 Save Company Profile
               </Button>
             </div>

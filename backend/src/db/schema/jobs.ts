@@ -6,7 +6,7 @@ export const jobTypeEnum = pgEnum("job_type", [
     "full_time", "part_time", "internship"
 ]);
 export const jobStatusEnum = pgEnum("job_status", [
-    "open", "closed", "draft"
+    "open", "draft"
 ]);
 
 export const jobs = pgTable("jobs", {
