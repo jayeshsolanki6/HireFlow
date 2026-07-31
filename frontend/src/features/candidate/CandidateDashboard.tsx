@@ -7,6 +7,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { Table } from '../../components/ui/Table';
 import { Loading } from '@/components/ui/Loading';
 import { Briefcase } from 'lucide-react';
+import { formatSalaryRange } from '@/lib/format';
 import { useCandidateStore } from './candidateStore';
 import { candidateApi } from './candidate.api';
 
@@ -200,7 +201,7 @@ export const CandidateDashboard = () => {
                   <div className="flex justify-between items-center pt-2.5 border-t border-[var(--color-hairline)] text-[10px] text-[var(--color-ink-subtle)]">
                     {(job.salaryMin || job.salaryMax) ? (
                       <span className="font-mono text-[var(--color-primary-hover)] font-medium">
-                        ${job.salaryMin?.toLocaleString() ?? '—'} - ${job.salaryMax?.toLocaleString() ?? '—'}
+                        {formatSalaryRange(job.salaryMin, job.salaryMax)}
                       </span>
                     ) : (
                       <span className="italic">Not disclosed</span>

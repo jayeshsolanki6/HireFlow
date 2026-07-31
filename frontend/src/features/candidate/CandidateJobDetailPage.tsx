@@ -9,6 +9,7 @@ import {
   Bookmark, BookmarkCheck, AlertCircle,
   Sparkles, RefreshCw, Star, CheckCircle2, AlertTriangle, Lightbulb
 } from 'lucide-react';
+import { formatSalaryRange } from '@/lib/format';
 import { useCandidateStore } from './candidateStore';
 import { candidateApi } from './candidate.api';
 
@@ -198,9 +199,7 @@ export const CandidateJobDetailPage = () => {
             <div className="flex flex-col">
               <span className="text-[10px] text-[var(--color-ink-subtle)] uppercase">Annual Salary</span>
               <span className="font-semibold text-emerald-500">
-                {job.salaryMin || job.salaryMax
-                  ? `$${job.salaryMin?.toLocaleString() ?? '—'} - $${job.salaryMax?.toLocaleString() ?? '—'}`
-                  : 'Not disclosed'}
+                {formatSalaryRange(job.salaryMin, job.salaryMax)}
               </span>
             </div>
             <div className="flex flex-col">

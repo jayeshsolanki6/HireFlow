@@ -28,7 +28,6 @@ export const MyApplicationsPage = () => {
   const navigate = useNavigate();
 
   const myApplications = useCandidateStore((state) => state.myApplications);
-  const isLoading = useCandidateStore((state) => state.isLoading);
   const getMyApplications = useCandidateStore((state) => state.getMyApplications);
 
   const [selectedTab, setSelectedTab] = useState<string>('All');

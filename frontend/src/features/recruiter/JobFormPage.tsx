@@ -149,9 +149,6 @@ export const JobFormPage = () => {
   return (
     <div className="flex flex-col gap-6 py-4 font-sans text-[var(--color-ink)]">
       <div className="flex items-center gap-3">
-        {/* <Button variant="tertiary" className="p-1.5" onClick={() => navigate(-1)}>
-          <ArrowLeft size={16} />
-        </Button> */}
         <div className="flex flex-col">
           <h1 className="text-xl font-bold tracking-tight">{isEdit ? 'Edit Job Posting' : 'Create Job'}</h1>
           <p className="text-xs text-[var(--color-ink-subtle)]">Draft high-density specification lists for matching applicants.</p>
@@ -205,13 +202,13 @@ export const JobFormPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
-                label="Salary Min ($)"
+                label="Salary Min (₹)"
                 type="number"
                 value={salaryMin}
                 onChange={(e) => setSalaryMin(e.target.value)}
               />
               <Input
-                label="Salary Max ($)"
+                label="Salary Max (₹)"
                 type="number"
                 value={salaryMax}
                 onChange={(e) => setSalaryMax(e.target.value)}

@@ -11,7 +11,6 @@ const ProtectedRoute = ({ children, roles } : ProtectedRouteProps) => {
     const {user, accessToken, isLoading} = useAuthStore();
 
     if(isLoading){
-        console.log('Auth state is loading...');
         return (
             <Loading />
         )

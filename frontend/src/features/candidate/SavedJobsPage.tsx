@@ -5,6 +5,7 @@ import { Card } from '../../components/ui/Card';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { Loading } from '@/components/ui/Loading';
 import { Bookmark, Trash2 } from 'lucide-react';
+import { formatSalaryRange } from '@/lib/format';
 import { useCandidateStore } from './candidateStore';
 
 const jobTypeLabels: Record<string, string> = {
@@ -86,7 +87,7 @@ export const SavedJobsPage = () => {
               <div className="flex items-center justify-between pt-3 border-t border-[var(--color-hairline)] text-[10px] text-[var(--color-ink-subtle)] mt-auto">
                 {(job.salaryMin || job.salaryMax) ? (
                   <span className="font-mono text-[var(--color-primary-hover)] font-medium">
-                    ${job.salaryMin?.toLocaleString() ?? '—'} - ${job.salaryMax?.toLocaleString() ?? '—'}
+                    {formatSalaryRange(job.salaryMin, job.salaryMax)}
                   </span>
                 ) : (
                   <span className="italic">Not disclosed</span>

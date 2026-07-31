@@ -5,15 +5,15 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
-import { ArrowLeft, Edit3, Users, Calendar, MapPin, DollarSign, Clock, Trash2, Tag, IndianRupee } from 'lucide-react';
+import { ArrowLeft, Edit3, Users, Calendar, MapPin, Clock, Trash2, Tag, IndianRupee } from 'lucide-react';
 
+import { formatSalaryRange } from '@/lib/format';
 import { useRecruiterStore } from './recruiterStore';
 
 export const RecruiterJobDetailPage = () => {
   const { jobId } = useParams<{ jobId: string }>();
   const allJobs = useRecruiterStore((state) => state.allJobs);
   const deleteJob = useRecruiterStore((state) => state.deleteJob);
-  // const applications = useRecruiterStore((state) => state.applications);
 
   const navigate = useNavigate();
 
@@ -32,9 +32,6 @@ export const RecruiterJobDetailPage = () => {
       </div>
     );
   }
-
-  // const jobApplications = applications.filter(a => a.jobId === job.id);
-  // const applicantCount = jobApplications.length;
 
   const statusVariants = {
     open: 'success' as const,
@@ -84,7 +81,6 @@ export const RecruiterJobDetailPage = () => {
                   Edit
                 </Button>
                 <Button variant="primary" leftIcon={<Users size={14} />} onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)}>
-                  {/* View Applicants ({applicantCount}) */}
                   View Applicants
                 </Button>
               </div>
@@ -101,7 +97,7 @@ export const RecruiterJobDetailPage = () => {
               </div>
               <div className="flex flex-col gap-1">
                 <span className="text-[10px] uppercase font-bold text-[var(--color-ink-subtle)] flex items-center gap-1"><IndianRupee size={12} /> Salary Range</span>
-                <span className="text-sm font-medium">{(job.salaryMin && job.salaryMax) ? `${(job.salaryMin).toLocaleString()} - ${(job.salaryMax).toLocaleString()}` : 'N/A'}</span>
+                <span className="text-sm font-medium">{(job.salaryMin || job.salaryMax) ? formatSalaryRange(job.salaryMin, job.salaryMax) : 'N/A'}</span>
               </div>
               <div className="flex flex-col gap-1">
                 <span className="text-[10px] uppercase font-bold text-[var(--color-ink-subtle)] flex items-center gap-1"><Calendar size={12} /> Deadline</span>

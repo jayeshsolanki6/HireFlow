@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-import { Search, MapPin, Briefcase, Bookmark, BookmarkCheck, IndianRupee, Loader2 } from 'lucide-react';
+import { formatSalary, formatSalaryRange } from '@/lib/format';
 import { useCandidateStore } from './candidateStore';
+import { Search, MapPin, Briefcase, Bookmark, BookmarkCheck, Loader2 } from 'lucide-react';
 
 const jobTypeLabels: Record<string, string> = {
   full_time: 'Full-time',
@@ -116,8 +117,8 @@ export const BrowseJobsPage = () => {
                 onChange={(e) => setJobFilters({ minSalary: Number(e.target.value) })}
                 className="flex-1 accent-[var(--color-primary)]"
               />
-              <span className="text-xs font-mono font-medium text-[var(--color-ink)] w-14 text-right">
-                ${jobFilters.minSalary >= 1000 ? `${jobFilters.minSalary / 1000}k` : jobFilters.minSalary}
+              <span className="text-xs font-mono font-medium text-[var(--color-ink)] w-24 text-right">
+                {formatSalary(jobFilters.minSalary)}
               </span>
             </div>
           </div>
@@ -156,63 +157,62 @@ export const BrowseJobsPage = () => {
         ) : (
           <div className="relative">
             <div className={`grid grid-cols-1 gap-3.5 ${isLoading ? 'opacity-30' : ''}`}>
-            {jobs.map((job) => {
-              const isSaved = savedJobIds.has(job.jobId);
-              const isSaving = isSavingJobId === job.jobId;
-              return (
-                <Card
-                  key={job.jobId}
-                  isHoverable
-                  className="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer"
-                  onClick={() => navigate(`/candidate/jobs/${job.jobId}`)}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="h-10 w-10 rounded flex items-center justify-center text-sm font-bold bg-white text-black border border-[var(--color-hairline)] shrink-0 overflow-hidden">
-                      {job.companyLogoUrl ? (
-                        <img src={job.companyLogoUrl} alt={job.companyName} className="w-full h-full object-cover" />
-                      ) : (
-                        job.companyName?.[0] || '?'
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-[var(--color-ink-muted)] font-medium">{job.companyName}</span>
-                        <span className="text-[var(--color-hairline-strong)]">•</span>
-                        <span className="text-xs text-[var(--color-ink-subtle)]">{job.location}</span>
+              {jobs.map((job) => {
+                const isSaved = savedJobIds.has(job.jobId);
+                const isSaving = isSavingJobId === job.jobId;
+                return (
+                  <Card
+                    key={job.jobId}
+                    isHoverable
+                    className="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer"
+                    onClick={() => navigate(`/candidate/jobs/${job.jobId}`)}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="h-10 w-10 rounded flex items-center justify-center text-sm font-bold bg-white text-black border border-[var(--color-hairline)] shrink-0 overflow-hidden">
+                        {job.companyLogoUrl ? (
+                          <img src={job.companyLogoUrl} alt={job.companyName} className="w-full h-full object-cover" />
+                        ) : (
+                          job.companyName?.[0] || '?'
+                        )}
                       </div>
-                      <h3 className="text-sm font-semibold text-[var(--color-ink)]">{job.title}</h3>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-[var(--color-ink-muted)] font-medium">{job.companyName}</span>
+                          <span className="text-[var(--color-hairline-strong)]">•</span>
+                          <span className="text-xs text-[var(--color-ink-subtle)]">{job.location}</span>
+                        </div>
+                        <h3 className="text-sm font-semibold text-[var(--color-ink)]">{job.title}</h3>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex flex-col items-end gap-2 text-right">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="bg-[var(--color-surface-2)] text-[var(--color-ink-muted)] px-1.5 py-0.5 rounded text-[10px] font-medium">
-                        {jobTypeLabels[job.jobType] || job.jobType}
-                      </span>
-                      {(job.salaryMin || job.salaryMax) ? (
-                        <span className="text-xs font-mono text-[var(--color-primary-hover)] font-medium">
-                          <IndianRupee size={12} className="inline mr-1" />
-                          {job.salaryMin?.toLocaleString() ?? '—'} - {job.salaryMax?.toLocaleString() ?? '—'}
+                    <div className="flex flex-col items-end gap-2 text-right">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="bg-[var(--color-surface-2)] text-[var(--color-ink-muted)] px-1.5 py-0.5 rounded text-[10px] font-medium">
+                          {jobTypeLabels[job.jobType] || job.jobType}
                         </span>
-                      ) : (<span className="text-xs font-mono text-[var(--color-ink-subtle)] font-medium"><IndianRupee size={12} className="inline mr-1" />Not disclosed</span>)}
-                      <span className="text-[10px] text-[var(--color-ink-subtle)] font-mono">
-                        {new Date(job.createdAt).toLocaleDateString()}
-                      </span>
+                        {(job.salaryMin || job.salaryMax) ? (
+                          <span className="text-xs font-mono text-[var(--color-primary-hover)] font-medium">
+                            {formatSalaryRange(job.salaryMin, job.salaryMax)}
+                          </span>
+                        ) : (<span className="text-xs font-mono text-[var(--color-ink-subtle)] font-medium">Not disclosed</span>)}
+                        <span className="text-[10px] text-[var(--color-ink-subtle)] font-mono">
+                          {new Date(job.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <Button
+                        variant="tertiary"
+                        className="text-[10px] py-1 px-2 border border-[var(--color-hairline)]"
+                        onClick={(e) => toggleSaveJob(e, job.jobId)}
+                        isLoading={isSaving}
+                        disabled={isSaving}
+
+                      >
+                        {isSaved ? <span className="flex items-center gap-1"><BookmarkCheck size={12} />Saved</span> : <span className="flex items-center gap-1"><Bookmark size={12} />Save</span>}
+                      </Button>
                     </div>
-                    <Button
-                      variant="tertiary"
-                      className="text-[10px] py-1 px-2 border border-[var(--color-hairline)]"
-                      onClick={(e) => toggleSaveJob(e, job.jobId)}
-                      isLoading={isSaving}
-                      disabled={isSaving}
-                      
-                    >
-                      {isSaved ? <span className="flex items-center gap-1"><BookmarkCheck size={12} />Saved</span> : <span className="flex items-center gap-1"><Bookmark size={12} />Save</span>}
-                    </Button>
-                  </div>
-                </Card>
-              );
-            })}
+                  </Card>
+                );
+              })}
             </div>
           </div>
         )}

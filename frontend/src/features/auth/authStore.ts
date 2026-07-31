@@ -41,7 +41,6 @@ export const useAuthStore = create<AuthState>((set)=>({
     },
     
     login : async (email : string, password : string) => {
-        console.log('Logging in with email:', email, 'and password:', password);
         set({ isLoggingIn : true });
         try {
             const response = await authApi.login({ email, password });

@@ -50,7 +50,6 @@ export const RegisterPage = () => {
 
     const result = await useAuthStore.getState().register(name, email, password, role);
     if(result){
-      console.log('User role:', result);
       navigate(`/${result}/dashboard`);
     }
   };

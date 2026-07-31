@@ -39,7 +39,6 @@ export const LoginPage = () => {
     if(!validateForm()) return;
     const result = await useAuthStore.getState().login(email, password);
     if(result){
-      console.log('User role:', result);
       navigate(`/${result}/dashboard`);
     }
   };
