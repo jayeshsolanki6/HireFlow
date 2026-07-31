@@ -36,12 +36,13 @@ export const getFilteredJobs = async (
         .innerJoin(companies, eq(jobs.companyId, companies.id))
         .where(
             and(
+                eq(jobs.jobStatus, 'open'),
                 filters.search ? or(
                     ilike(jobs.title, `%${filters.search}%`),
                     ilike(jobs.description, `%${filters.search}%`),
                     ilike(jobs.requirements, `%${filters.search}%`)
                 ) : undefined,
-                filters.location ? ilike(jobs.location, `%${filters.location}$%`) : undefined,
+                filters.location ? ilike(jobs.location, `%${filters.location}%`) : undefined,
                 filters.jobType ? eq(jobs.jobType, filters.jobType) : undefined,
                 filters.minSalary ? gte(jobs.salaryMin, filters.minSalary) : undefined
             )

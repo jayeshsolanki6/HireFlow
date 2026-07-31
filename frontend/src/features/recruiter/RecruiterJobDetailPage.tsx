@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../../components/ui/Button';
@@ -13,12 +13,19 @@ import { useRecruiterStore } from './recruiterStore';
 export const RecruiterJobDetailPage = () => {
   const { jobId } = useParams<{ jobId: string }>();
   const allJobs = useRecruiterStore((state) => state.allJobs);
+  const getAllJobs = useRecruiterStore((state) => state.getAllJobs);
   const deleteJob = useRecruiterStore((state) => state.deleteJob);
 
   const navigate = useNavigate();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (allJobs.length === 0) {
+      getAllJobs();
+    }
+  }, [allJobs.length, getAllJobs]);
 
   const job = allJobs.find(j => j.id === jobId);
 

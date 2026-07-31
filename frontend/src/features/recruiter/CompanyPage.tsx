@@ -45,10 +45,12 @@ export const CompanyPage = () => {
     if (file) {
       if (!file?.type.startsWith('image/')) {
         setErrors((prev) => ({ ...prev, logo: "Please select a valid image file" }));
+        e.target.value = '';
         return;
       }
       if (file.size > 2 * 1024 * 1024) {
         setErrors((prev) => ({ ...prev, logo: "File size should be less than 2MB" }));
+        e.target.value = '';
         return;
       }
 

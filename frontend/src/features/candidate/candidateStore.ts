@@ -172,6 +172,7 @@ export const useCandidateStore = create<CandidateState>((set) => ({
             });
         } catch (error) {
             console.error(error);
+            toast.error("Failed to load saved jobs.");
         } finally {
             set({ isLoading: false });
         }
@@ -229,6 +230,7 @@ export const useCandidateStore = create<CandidateState>((set) => ({
             });
         } catch (error) {
             console.error(error);
+            toast.error("Failed to load applications.");
         }
     },
 

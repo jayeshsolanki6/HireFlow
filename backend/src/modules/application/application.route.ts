@@ -48,19 +48,19 @@ router.patch(
 );
 
 router.get(
-    '/:id',
-    validate(accessSchema, "headers"),
-    authenticate,
-    authorize(["recruiter"]),
-    getApplicationDetail
-);
-
-router.get(
     '/recruiter/recent',
     validate(accessSchema, "headers"),
     authenticate,
     authorize(["recruiter"]),
     getRecruiterDashboardApplications
+);
+
+router.get(
+    '/:id',
+    validate(accessSchema, "headers"),
+    authenticate,
+    authorize(["recruiter"]),
+    getApplicationDetail
 );
 
 export default router;

@@ -110,10 +110,7 @@ export const countApplicationsByRecruiterId = async (recruiterId: string) => {
         .from(applications)
         .innerJoin(jobs, eq(applications.jobId, jobs.id))
         .innerJoin(companies, eq(jobs.companyId, companies.id))
-        .where(and(
-            eq(companies.recruiterId, recruiterId),
-            eq(jobs.jobStatus, 'open')
-        ));
+        .where(eq(companies.recruiterId, recruiterId));
     return result[0]?.count ?? 0;
 };
 
@@ -131,10 +128,7 @@ export const findRecentApplicationsByRecruiterId = async (recruiterId: string, l
         .innerJoin(jobs, eq(applications.jobId, jobs.id))
         .innerJoin(companies, eq(jobs.companyId, companies.id))
         .innerJoin(users, eq(applications.candidateId, users.id))
-        .where(and(
-            eq(companies.recruiterId, recruiterId),
-            eq(jobs.jobStatus, 'open')
-        ))
+        .where(eq(companies.recruiterId, recruiterId))
         .orderBy(desc(applications.appliedAt))
         .limit(limit);
 };

@@ -15,7 +15,8 @@ export const JobFormPage = () => {
   const isLoading = useRecruiterStore((state) => state.isLoading);
   const company = useRecruiterStore((state) => state.company);
   const getCompany = useRecruiterStore((state) => state.getCompany);
-  const getJobById = useRecruiterStore((state) => state.getJobById);
+  const allJobs = useRecruiterStore((state) => state.allJobs);
+  const getAllJobs = useRecruiterStore((state) => state.getAllJobs);
   const createJob = useRecruiterStore((state) => state.createJob);
   const updateJob = useRecruiterStore((state) => state.updateJob);
 
@@ -44,10 +45,17 @@ export const JobFormPage = () => {
     getCompany();
   }, [getCompany]);
 
+  // In edit mode, look up the job from the store (which has all statuses, including drafts).
+  // If the store is empty (e.g. direct URL navigation), fetch all jobs first.
   useEffect(() => {
     if (!isEdit || !jobId) return;
     (async () => {
-      const job = await getJobById(jobId);
+      let jobs = allJobs;
+      if (jobs.length === 0) {
+        await getAllJobs();
+        jobs = useRecruiterStore.getState().allJobs;
+      }
+      const job = jobs.find((j) => j.id === jobId);
       if (!job) {
         navigate('/recruiter/jobs');
         return;
@@ -62,7 +70,7 @@ export const JobFormPage = () => {
       setRequirements(job.requirements || '');
       setIsFetchingJob(false);
     })();
-  }, [isEdit, jobId, getJobById, navigate]);
+  }, [isEdit, jobId, navigate]);
 
   if (isLoading || isFetchingJob) {
     return <Loading />;

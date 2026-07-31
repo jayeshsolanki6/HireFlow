@@ -128,7 +128,7 @@ export const RecruiterDashboard = () => {
                     header: '',
                     accessor: (row: any) => (
                       <div className="flex justify-end">
-                        <Button variant="tertiary" className="text-[10px] py-1 px-2" onClick={() => navigate(`/recruiter/jobs/${row.jobId}/edit`)}>
+                        <Button variant="tertiary" className="text-[10px] py-1 px-2" onClick={() => navigate(`/recruiter/jobs/${row.id}`)}>
                           View
                         </Button>
                       </div>
