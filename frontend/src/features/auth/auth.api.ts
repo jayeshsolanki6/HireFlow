@@ -9,7 +9,7 @@ interface RegisterRequest {
     name : string;
     email : string;
     password : string;
-    role : "candidate" | "recruiter" | "admin";
+    role : "candidate" | "recruiter" ;
 }
 
 

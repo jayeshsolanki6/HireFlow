@@ -36,6 +36,41 @@
       "when": 1784292308573,
       "tag": "0004_light_sue_storm",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1785323602958,
+      "tag": "0005_misty_boomerang",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1785436271470,
+      "tag": "0006_polite_white_tiger",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1785437129531,
+      "tag": "0007_condemned_sauron",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1785437254297,
+      "tag": "0008_little_sharon_carter",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1785479916720,
+      "tag": "0009_wakeful_doctor_octopus",
+      "breakpoints": true
     }
   ]
 }

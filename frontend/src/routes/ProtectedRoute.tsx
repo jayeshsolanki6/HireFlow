@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
-    roles: ('candidate' | 'recruiter' | 'admin')[];
+    roles: ('candidate' | 'recruiter')[];
 }
 
 const ProtectedRoute = ({ children, roles } : ProtectedRouteProps) => {

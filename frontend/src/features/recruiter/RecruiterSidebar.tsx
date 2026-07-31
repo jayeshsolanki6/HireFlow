@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Briefcase, LogOut, Menu, PanelLeftClose, LayoutDashboard, Building2, FileText } from 'lucide-react';
+import { LogOut, Menu, PanelLeftClose, LayoutDashboard, Building2, FileText } from 'lucide-react';
+import { Logo } from '../../components/ui/Logo';
 import { useAuthStore } from '../auth/authStore';
 import { useRecruiterStore } from './recruiterStore';
 
@@ -38,10 +39,7 @@ export const RecruiterSidebar = () => {
                         onClick={() => navigate('/')}
                         style={{ transition: 'width 0.2s, opacity 0.2s' }}
                     >
-                        <div className="h-8 w-8 shrink-0 rounded-lg bg-black flex items-center justify-center text-white">
-                            <Briefcase size={16} strokeWidth={2.5} />
-                        </div>
-                        <span className="whitespace-nowrap">HireFlow</span>
+                        <Logo size="sm" />
                     </div>
 
                     {/* Toggle Button inside Header */}

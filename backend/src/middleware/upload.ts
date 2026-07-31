@@ -13,12 +13,13 @@ export const upload = multer({
             "image/jpeg",
             "image/png",
             "image/webp",
+            "application/pdf"
         ];
 
         if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new ApiError(400, "Only jpg, png and webp images are allowed"));
+            cb(new ApiError(400, "File not allowed."));
         }
     },
 });

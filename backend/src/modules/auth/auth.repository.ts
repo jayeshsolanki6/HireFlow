@@ -5,9 +5,9 @@ import { users, refreshTokens } from '../../db/schema/index.js'
 
 export const findUserByEmail = async (email : string) => {
     const result = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email));
+        .select()
+        .from(users)
+        .where(eq(users.email, email));
     
     return result[0];
 }

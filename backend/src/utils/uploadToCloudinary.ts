@@ -6,7 +6,7 @@ export const uploadImage = async (buffer: Buffer): Promise<string> => {
     const result = await new Promise<UploadApiResponse>((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
             {
-                folder: "hireflow/company-logos",
+                folder: "hireflow/profile_images",
             },
             (error: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {
                 if (error) return reject(error);
@@ -21,15 +21,12 @@ export const uploadImage = async (buffer: Buffer): Promise<string> => {
 };
 
 
-export const uploadPdf = async (
-    buffer: Buffer,
-    folder: string = "hireflow/resumes"
-): Promise<string> => {
+export const uploadPdf = async (buffer: Buffer): Promise<string> => {
     const result = await new Promise<UploadApiResponse>((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
             {
-                folder,
-                resource_type: "raw",
+                folder: "hireflow/resumes",
+                resource_type: "auto",
                 format: "pdf",
             },
             (error: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {

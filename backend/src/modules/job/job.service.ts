@@ -1,8 +1,31 @@
 import { ApiError } from "../../utils/ApiError.js";
-import { createJob, findCompanyIdByRecruiterId, getAllJobsByCompanyId, getJobById, updateJob, deleteJob } from "./job.repository.js";
+import { createJob, findCompanyIdByRecruiterId, getAllJobsByCompanyId, getJobById, updateJob, deleteJob, getFilteredJobs } from "./job.repository.js";
 import { CreateJobInput } from "./job.types.js";
 
 export const job = {
+    
+    getJobs: async (
+        filters : {
+            search?: string,
+            location?: string, 
+            jobType?: 'full_time' | 'part_time' | 'internship', 
+            minSalary?: number 
+        }
+    ) => {
+        const result = await getFilteredJobs(filters);
+        return result;
+    },
+    
+    getJob: async (jobId : string) => {
+        const result = await getJobById(jobId);
+
+        if(!result) {
+            throw new ApiError(404, "Job not found.");
+        }
+
+        return result;
+    },
+
     createJob: async (jobData : CreateJobInput) => {
         const companyId = await findCompanyIdByRecruiterId(jobData.recruiterId);
 
@@ -15,7 +38,8 @@ export const job = {
         return result;
     },
 
-    getAllJobs: async (recruiterId : string) => {
+
+    getMyJobs: async (recruiterId : string) => {
         const companyId = await findCompanyIdByRecruiterId(recruiterId);
 
         if(!companyId) {
@@ -27,15 +51,6 @@ export const job = {
         return result;
     },
 
-    getJob: async (jobId : string) => {
-        const result = await getJobById(jobId);
-
-        if(!result) {
-            throw new ApiError(404, "Job not found.");
-        }
-
-        return result;
-    },
 
     updateJob: async (jobId : string, jobData : CreateJobInput) => {
         const companyId = await findCompanyIdByRecruiterId(jobData.recruiterId);

@@ -2,11 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/ApiError.js";
 import { verifyAccessToken } from "../utils/jwt.js";
 import { findUserById } from "../modules/auth/auth.repository.js";
-// import { AuthenticatedRequest } from "../types/types.js";
 
 interface AccessTokenPayload {
     userId : string,
-    role : "candidate" | "recruiter" | "admin"
+    role : "candidate" | "recruiter" ;
 }
 
 export const authenticate = async (req : Request, res : Response, next : NextFunction)=>{

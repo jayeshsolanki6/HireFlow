@@ -1,7 +1,7 @@
 import { pgTable, pgEnum, timestamp, uuid, varchar, boolean, text } from 'drizzle-orm/pg-core'
 
 export const roleEnum = pgEnum("role", [
-    "candidate", "recruiter", "admin"
+    "candidate", "recruiter"
 ]);
 
 export const users = pgTable("users", {

@@ -42,9 +42,9 @@ export const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {isLoading && <Loader2 className="animate-spin h-4 w-4" />}
-      {!isLoading && leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}
+      {!isLoading && leftIcon && <span className="shrink-0">{leftIcon}</span>}
       <span>{children}</span>
-      {!isLoading && rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
+      {!isLoading && rightIcon && <span className="shrink-0">{rightIcon}</span>}
     </button>
   );
 };

@@ -5,7 +5,8 @@ import { RegisterSchema } from './auth.schema';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
-import { Briefcase, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { Logo } from '../../components/ui/Logo';
 import { useAuthStore } from './authStore';
 
 export const RegisterPage = () => {
@@ -57,11 +58,8 @@ export const RegisterPage = () => {
   return (
     <div className="w-full max-w-[450px] flex flex-col gap-5 font-sans mx-auto py-8">
       <div className="flex flex-col items-center gap-6 text-center">
-        <Link to="/" className="flex items-center gap-2.5 font-bold tracking-tight text-[var(--color-ink)] hover:opacity-80 transition-opacity">
-          <div className="h-12 w-12 rounded-xl bg-black flex items-center justify-center text-white shadow-sm">
-            <Briefcase size={22} strokeWidth={2.5} />
-          </div>
-          <span className="text-2xl">HireFlow</span>
+        <Link to="/" className="hover:opacity-80 transition-opacity">
+          <Logo size="lg" />
         </Link>
       </div>
 

@@ -1,29 +1,59 @@
+import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Table } from '../../components/ui/Table';
+import { Loading } from '@/components/ui/Loading';
 import { Briefcase, Users, Plus, Eye, ChevronRight } from 'lucide-react';
+import { useRecruiterStore } from './recruiterStore';
 
+const jobStatusVariants: Record<string, 'success' | 'default' | 'error'> = {
+  open: 'success',
+  draft: 'default'
+};
+
+const appStatusVariants: Record<string, 'default' | 'primary' | 'error' | 'success'> = {
+  applied: 'default',
+  shortlisted: 'primary',
+  rejected: 'error',
+  hired: 'success',
+};
 
 export const RecruiterDashboard = () => {
-
   const navigate = useNavigate();
-  const totalJobs = 10;
-  const activeJobs = 5;
-  const closedJobs = 3;
-  const totalApplicants = 50;
 
-  const recentJobs :any[] = [];
-  const recentActivities : any[] = [];
-  
+  const isLoading = useRecruiterStore((state) => state.isLoading);
+  const allJobs = useRecruiterStore((state) => state.allJobs);
+  const getAllJobs = useRecruiterStore((state) => state.getAllJobs);
+  const recentApplications = useRecruiterStore((state) => state.recentApplications);
+  const totalOpenApplications = useRecruiterStore((state) => state.totalOpenApplications);
+  const getRecentApplications = useRecruiterStore((state) => state.getRecentApplications);
+
+  useEffect(() => {
+    getAllJobs();
+    getRecentApplications();
+  }, [getAllJobs, getRecentApplications]);
+
+  const totalJobs = allJobs.length;
+  const activeJobs = allJobs.filter((j) => j.jobStatus === 'open').length;
+  const draftJobs = allJobs.filter((j) => j.jobStatus === 'draft').length;
+
+  const recentJobs = [...allJobs]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 5);
+
   const stats = [
     { label: 'Total Jobs Posted', value: totalJobs },
     { label: 'Active Jobs', value: activeJobs },
-    { label: 'Closed Jobs', value: closedJobs },
-    { label: 'Total Applications', value: totalApplicants }
-  ]
+    { label: 'Draft Jobs', value: draftJobs },
+    { label: 'Open Job Applications', value: totalOpenApplications }
+  ];
+
+  if (isLoading && allJobs.length === 0) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-col gap-6 py-4 font-sans text-[var(--color-ink)]">
@@ -81,7 +111,7 @@ export const RecruiterDashboard = () => {
                 columns={[
                   {
                     header: 'Title',
-                    accessor: (row) => (
+                    accessor: (row: any) => (
                       <div className="flex flex-col gap-1">
                         <span className="font-semibold text-[var(--color-ink)]">{row.title}</span>
                         <span className="text-[10px] text-[var(--color-ink-subtle)]">{row.location}</span>
@@ -90,20 +120,15 @@ export const RecruiterDashboard = () => {
                   },
                   {
                     header: 'Status',
-                    accessor: (row) => {
-                      const variants = {
-                        active: 'success' as const,
-                        draft: 'default' as const,
-                        closed: 'error' as const
-                      };
-                      return <Badge variant={variants[row.status]}>{row.status}</Badge>;
-                    }
+                    accessor: (row: any) => (
+                      <Badge variant={jobStatusVariants[row.jobStatus]}>{row.jobStatus}</Badge>
+                    )
                   },
                   {
                     header: '',
-                    accessor: (row) => (
+                    accessor: (row: any) => (
                       <div className="flex justify-end">
-                        <Button variant="tertiary" className="text-[10px] py-1 px-2" onClick={() => navigate(`/recruiter/jobs/${row.id}`)}>
+                        <Button variant="tertiary" className="text-[10px] py-1 px-2" onClick={() => navigate(`/recruiter/jobs/${row.jobId}/edit`)}>
                           View
                         </Button>
                       </div>
@@ -121,8 +146,8 @@ export const RecruiterDashboard = () => {
           <div className="flex justify-between items-center">
             <h2 className="text-sm font-semibold text-[var(--color-ink)]">Recent Applications</h2>
           </div>
-          
-          {recentActivities.length === 0 ? (
+
+          {recentApplications.length === 0 ? (
             <Card className="p-8 flex flex-col items-center justify-center text-center gap-3">
               <div className="h-10 w-10 rounded-full bg-[var(--color-surface-2)] flex items-center justify-center text-[var(--color-ink-subtle)]">
                 <Users size={20} />
@@ -134,11 +159,11 @@ export const RecruiterDashboard = () => {
             </Card>
           ) : (
             <Card className="overflow-hidden">
-              <Table<{ id: string; candidateName: string; jobTitle: string; appliedDate: string; status: string }>
+              <Table
                 columns={[
                   {
                     header: 'Candidate',
-                    accessor: (row) => (
+                    accessor: (row: any) => (
                       <div className="flex flex-col gap-1">
                         <span className="font-semibold text-[var(--color-ink)]">{row.candidateName}</span>
                         <span className="text-[10px] text-[var(--color-ink-subtle)]">Applied for {row.jobTitle}</span>
@@ -147,22 +172,16 @@ export const RecruiterDashboard = () => {
                   },
                   {
                     header: 'Date',
-                    accessor: (row) => <span className="text-xs text-[var(--color-ink-subtle)]">{new Date(row.appliedDate).toLocaleDateString()}</span>
+                    accessor: (row: any) => <span className="text-xs text-[var(--color-ink-subtle)]">{new Date(row.appliedAt).toLocaleDateString()}</span>
                   },
                   {
                     header: 'Status',
-                    accessor: (row) => {
-                      const variants = {
-                        applied: 'default' as const,
-                        shortlisted: 'success' as const,
-                        rejected: 'error' as const,
-                        hired: 'success' as const
-                      };
-                      return <Badge variant={variants[row.status as keyof typeof variants] || 'default'}>{row.status}</Badge>;
-                    }
+                    accessor: (row: any) => (
+                      <Badge variant={appStatusVariants[row.status]}>{row.status}</Badge>
+                    )
                   }
                 ]}
-                data={recentActivities}
+                data={recentApplications}
               />
             </Card>
           )}

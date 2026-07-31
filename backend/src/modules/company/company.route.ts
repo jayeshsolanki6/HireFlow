@@ -36,7 +36,7 @@ router.get(
 //     validate(accessSchema, "headers"), 
 //     authenticate, 
 //     authorize(["recruiter"]),
-//     upload.single("logo"), 
+//     uploadImage.single("logo"), 
 //     validate(companySchema, "body"), 
 //     updateCompany
 // );

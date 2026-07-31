@@ -9,11 +9,11 @@ import { ArrowLeft, Edit3, Users, Calendar, MapPin, DollarSign, Clock, Trash2, T
 
 import { useRecruiterStore } from './recruiterStore';
 
-export const JobDetailPage = () => {
+export const RecruiterJobDetailPage = () => {
   const { jobId } = useParams<{ jobId: string }>();
   const allJobs = useRecruiterStore((state) => state.allJobs);
   const deleteJob = useRecruiterStore((state) => state.deleteJob);
-//   const applications = useRecruiterStore((state) => state.applications);
+  // const applications = useRecruiterStore((state) => state.applications);
 
   const navigate = useNavigate();
 
@@ -33,8 +33,8 @@ export const JobDetailPage = () => {
     );
   }
 
-//   const jobApplications = applications.filter(a => a.jobId === job.id);
-//   const applicantCount = jobApplications.length;
+  // const jobApplications = applications.filter(a => a.jobId === job.id);
+  // const applicantCount = jobApplications.length;
 
   const statusVariants = {
     open: 'success' as const,
@@ -85,6 +85,7 @@ export const JobDetailPage = () => {
                 </Button>
                 <Button variant="primary" leftIcon={<Users size={14} />} onClick={() => navigate(`/recruiter/jobs/${job.id}/applicants`)}>
                   {/* View Applicants ({applicantCount}) */}
+                  View Applicants
                 </Button>
               </div>
             </div>

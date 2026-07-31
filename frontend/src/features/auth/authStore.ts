@@ -8,7 +8,7 @@ interface User {
     id : string;
     name : string;
     email : string;
-    role : "candidate" | "recruiter" | "admin";
+    role : "candidate" | "recruiter";
 }
 
 interface AuthState {
@@ -19,7 +19,7 @@ interface AuthState {
     isLoading : boolean;
 
     setAuth : (user : User | null, accessToken : string | null) => void;
-    login : (email : string, password : string) => Promise<"candidate" | "recruiter" | "admin" | null>;
+    login : (email : string, password : string) => Promise<"candidate" | "recruiter" | null>;
     register : (name : string, email : string, password : string, role : "candidate" | "recruiter") => Promise<"candidate" | "recruiter" | null>;
     refresh : () => Promise<void>;
     logout : () => Promise<void>;
