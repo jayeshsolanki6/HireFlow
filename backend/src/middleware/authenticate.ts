@@ -24,7 +24,7 @@ export const authenticate = async (req : Request, res : Response, next : NextFun
         
         const user = await findUserById(userId);
 
-        if(!user || !user.isActive) {
+        if(!user) {
             throw new ApiError(401, "Unauthorize.")
         }
 

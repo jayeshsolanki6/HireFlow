@@ -80,10 +80,6 @@ export const auth = {
             throw new ApiError(401, "Invalid refresh token");
         }
 
-        if(!user.isActive){
-            throw new ApiError(401, "Unauthorized");
-        }
-
         const storedRefreshToken = await findRefreshTokenByUserId(userId);
 
         if(!storedRefreshToken){

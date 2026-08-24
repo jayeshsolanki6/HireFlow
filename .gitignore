@@ -12,6 +12,8 @@ dist
 dist-ssr
 user-flow.md
 *.local
+PROJECT_INTERVIEW_GUIDE.md
+project_interview_guide.pdf
 
 # Editor directories and files
 .vscode/*

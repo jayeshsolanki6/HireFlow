@@ -1,5 +1,4 @@
 import { pgTable, uuid, timestamp, text, integer, varchar, pgEnum} from 'drizzle-orm/pg-core'
-import { users } from './users.js'
 import { companies } from './companies.js'
 
 export const jobTypeEnum = pgEnum("job_type", [

@@ -13,7 +13,6 @@ export const users = pgTable("users", {
     profileImageUrl : text(),
     resumeUrl : text(),
     bio : text(),
-    isActive : boolean().notNull().default(true),
     createdAt : timestamp().notNull().defaultNow(),
     updatedAt: timestamp().notNull().defaultNow(),
 });
