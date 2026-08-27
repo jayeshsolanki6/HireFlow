@@ -7,27 +7,27 @@ import { enqueueAnalysisJob } from "../../queue/analysis.queue.js";
 export const analysis = {
 
     analyzeAllForJob: async (recruiterId: string, jobId: string) => {
-    const jobOwner = await getJobWithCompanyOwner(jobId);
-    if (!jobOwner) throw new ApiError(404, "Job not found");
-    if (jobOwner.recruiterId !== recruiterId) {
-        throw new ApiError(403, "You are not allowed to analyze applicants for this job");
-    }
-
-    const applicants = await findApplicationsByJobId(jobId);
-
-    let queuedCount = 0;
-    for (const applicant of applicants) {
-        // only skip if currently mid-analysis — everything else (including completed) gets re-queued
-        if (applicant.analysisStatus === "processing" || applicant.analysisStatus === "pending") {
-            continue;
+        const jobOwner = await getJobWithCompanyOwner(jobId);
+        if (!jobOwner) throw new ApiError(404, "Job not found");
+        if (jobOwner.recruiterId !== recruiterId) {
+            throw new ApiError(403, "You are not allowed to analyze applicants for this job");
         }
-        await upsertPendingAnalysis(applicant.applicationId);
-        await enqueueAnalysisJob(applicant.applicationId);
-        queuedCount++;
-    }
 
-    return { queuedCount, totalApplicants: applicants.length };
-},
+        const applicants = await findApplicationsByJobId(jobId);
+
+        let queuedCount = 0;
+        for (const applicant of applicants) {
+            // only skip if currently mid-analysis — everything else (including completed) gets re-queued
+            if (applicant.analysisStatus === "processing" || applicant.analysisStatus === "pending") {
+                continue;
+            }
+            await upsertPendingAnalysis(applicant.applicationId);
+            await enqueueAnalysisJob(applicant.applicationId);
+            queuedCount++;
+        }
+
+        return { queuedCount, totalApplicants: applicants.length };
+    },
 
     analyseSingle: async (recruiterId: string, applicationId: string) => {
         const application = await findApplicationById(applicationId);

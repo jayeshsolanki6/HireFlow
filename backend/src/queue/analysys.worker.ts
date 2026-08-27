@@ -15,18 +15,23 @@ export const analysisWorker = new Worker(
 
         await setAnalysisProcessing(applicationId);
 
-        const application = await findApplicationById(applicationId);
-        if (!application) throw new Error(`Application ${applicationId} not found`);
+        try {
+            const application = await findApplicationById(applicationId);
+            if (!application) throw new Error(`Application ${applicationId} not found`);
 
-        const jobPosting = await getJobById(application.jobId);
-        if (!jobPosting) throw new Error(`Job ${application.jobId} not found`);
+            const jobPosting = await getJobById(application.jobId);
+            if (!jobPosting) throw new Error(`Job ${application.jobId} not found`);
 
-        const jobDescription = `${jobPosting.description}\n\nRequirements:\n${jobPosting.requirements}`;
-        const resumeText = await extractTextFromPdfUrl(application.resumeUrl);
+            const jobDescription = `${jobPosting.description}\n\nRequirements:\n${jobPosting.requirements}`;
+            const resumeText = await extractTextFromPdfUrl(application.resumeUrl);
 
-        const result = await getResumeAnalysis(jobDescription, resumeText);
+            const result = await getResumeAnalysis(jobDescription, resumeText);
 
-        await setAnalysisCompleted(applicationId, result.score, result);
+            await setAnalysisCompleted(applicationId, result.score, result);
+        } catch (error) {
+            await setAnalysisFailed(applicationId);
+            throw error;
+        }
     },
     { connection: redisConnection }
 );
@@ -38,7 +43,7 @@ analysisWorker.on("completed", (job) => {
 analysisWorker.on("failed", async (job, err) => {
     console.log(`❌ Job ${job?.id} failed`);
     console.error(err);
-    if (job?.data?.candidateId && job?.data?.jobId) {
+    if (job?.data?.applicationId) {
         await setAnalysisFailed(job.data.applicationId);
     }
 });

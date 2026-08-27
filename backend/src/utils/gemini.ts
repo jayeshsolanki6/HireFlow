@@ -7,16 +7,16 @@ dotenv.config();
 const ai = new GoogleGenAI({});
 
 
-export const getResumeAnalysis = async (jobDescription : string, resume : string) => {
+export const getResumeAnalysis = async (jobDescription: string, resume: string) => {
   const response = await ai.interactions.create({
-    model : "gemini-flash-lite-latest",
-    input : ANALYSIS_PROMPT(jobDescription, resume),
-    response_format : {
-      type : "text",
-      mime_type : "application/json",
-      schema : analysisJsonSchema
+    model: "gemini-flash-lite-latest",
+    input: ANALYSIS_PROMPT(jobDescription, resume),
+    response_format: {
+      type: "text",
+      mime_type: "application/json",
+      schema: analysisJsonSchema
     }
   }
-);
-return JSON.parse(response.output_text!);
+  );
+  return JSON.parse(response.output_text!);
 }

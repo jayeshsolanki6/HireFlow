@@ -3,13 +3,12 @@ import { redisConnection } from './connection.js'
 
 const analysisQueue = new Queue(
     'analysis-queue',
-    { 
-        connection : redisConnection,
-        defaultJobOptions : {
-            attempts : 1,
-            // backoff : { type : "fixed", delay : 5000 },
-            removeOnComplete : true,
-            // removeOnFail : 10
+    {
+        connection: redisConnection,
+        defaultJobOptions: {
+            attempts: 1,
+            removeOnComplete: true,
+            removeOnFail: true,
         }
     }
 )

@@ -71,6 +71,13 @@
       "when": 1785479916720,
       "tag": "0009_wakeful_doctor_octopus",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1787797714401,
+      "tag": "0010_minor_the_liberteens",
+      "breakpoints": true
     }
   ]
 }
